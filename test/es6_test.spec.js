@@ -5,7 +5,7 @@
 
 import chai from 'chai';
 
-var expect = chai.expect;
+let expect = chai.expect;
 
 function az_decorator_test(value) {
   return function decorator(target) {
@@ -95,8 +95,8 @@ describe('Es6 features test', function(){
 
 /*
 
-var chai = require("chai");
-var should = require('chai').should();
+let chai = require("chai");
+let should = require('chai').should();
 
 function cccc(){
   return 1;

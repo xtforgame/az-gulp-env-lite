@@ -4,8 +4,9 @@
   "description": "Gulp environment for server-side app with node.js6.x + babel6.x",
   "main": "dist/index.js",
   "scripts": {
+    "start": "gulp server:watch",
     "build": "eslint gulp && gulp library:build",
-    "test": "eslint test_es6 && gulp test:build && mocha --ui=tdd test"
+    "test": "cross-env NODE_ENV=test eslint ./test && mocha --compilers js:babel-core/register ./test/**/*.spec.js"
   },
   "repository": {
     "type": "git"
@@ -40,6 +41,7 @@
     "babel-preset-stage-2": "^6.13.0",
     "body-parser": "^1.15.0",
     "chai": "^3.5.0",
+    "cross-env": "^3.2.4",
     "eslint": "^3.17.0",
     "express": "^4.13.4",
     "fs-extra": "^0.28.0",

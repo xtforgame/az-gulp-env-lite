@@ -3,7 +3,6 @@ import path from 'path';
 import {GulpConfig} from './gulp/gulp-config';
 import serverTasks from './gulp/server';
 import libraryTasks from './gulp/library';
-import testTasks from './gulp/test';
 
 const projRoot  = path.resolve(__dirname);
 let config = {
@@ -72,22 +71,6 @@ let config = {
         //dist: {},
       },
     },
-    test: {
-      prefix: 'test',
-      entry: {
-        dir: 'test_es6',
-        js: {
-          glob: '**/*.js',
-        },
-      },
-      output: {
-        default: {
-          dir: 'test',
-        },
-        //dev: {},
-        //dist: {},
-      },
-    }
   },
 };
 
@@ -95,7 +78,6 @@ let gulpConfig = new GulpConfig(config);
 
 serverTasks.addTasks(gulpConfig);
 libraryTasks.addTasks(gulpConfig);
-testTasks.addTasks(gulpConfig);
 
 let serverConfig = gulpConfig.getSubmodule("server");
 gulp.task('watch', serverConfig.addPrefix(['watch']));
