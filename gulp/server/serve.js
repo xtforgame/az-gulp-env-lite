@@ -4,6 +4,7 @@ import nodemon from 'gulp-nodemon';
 
 function addServeTasks(serverConfig, commonLibraryConfig, envConfig){
   let serverSourceDir = serverConfig.joinPathByKeys(['entry']);
+  let delay = serverConfig.get('reloadDelay') || 1000;
   let watchArray = [serverSourceDir]
   let useCommonLibrary = serverConfig.get('useCommonLibrary');
   if(commonLibraryConfig && useCommonLibrary){
@@ -26,6 +27,7 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig){
         'doc/',
       ],
       tasks: reloadTasks,
+      delay,
     })
     .on('start', function () {
       if (!called) {

@@ -13,7 +13,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function addWatchTasks(serverConfig, envConfig) {
   var jsSourceFiles = serverConfig.joinPathByKeys(['entry', 'js', 'glob']);
   _gulp2.default.task(serverConfig.addPrefix('watch' + envConfig.postfix), serverConfig.addPrefix(['serve' + envConfig.postfix]), function (cb) {
-    _gulp2.default.watch(jsSourceFiles, serverConfig.addPrefix(['build' + envConfig.postfix]));
     cb();
   });
 }

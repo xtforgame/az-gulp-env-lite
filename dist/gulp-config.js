@@ -21,9 +21,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var GulpConfig = exports.GulpConfig = function () {
   function GulpConfig(config) {
-    var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    var paths = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+    var parent = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+    var name = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+    var paths = arguments.length <= 3 || arguments[3] === undefined ? [] : arguments[3];
 
     _classCallCheck(this, GulpConfig);
 
@@ -37,7 +37,7 @@ var GulpConfig = exports.GulpConfig = function () {
   _createClass(GulpConfig, [{
     key: 'getGulpPrefix',
     value: function getGulpPrefix() {
-      var delimiter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ':';
+      var delimiter = arguments.length <= 0 || arguments[0] === undefined ? ':' : arguments[0];
 
       if (!this.parent) {
         var prefix = this.get(['prefix'], null);
@@ -53,7 +53,7 @@ var GulpConfig = exports.GulpConfig = function () {
     value: function addPrefix(names) {
       var _this = this;
 
-      var delimiter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ':';
+      var delimiter = arguments.length <= 1 || arguments[1] === undefined ? ':' : arguments[1];
 
       if (Array.isArray(names)) {
         return names.map(function (name) {

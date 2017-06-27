@@ -3,7 +3,9 @@ import gulp from 'gulp';
 function addWatchTasks(serverConfig, envConfig){
   let jsSourceFiles = serverConfig.joinPathByKeys(['entry', 'js', 'glob']);
   gulp.task(serverConfig.addPrefix('watch' + envConfig.postfix), serverConfig.addPrefix(['serve' + envConfig.postfix]), function(cb) {
-    gulp.watch(jsSourceFiles, serverConfig.addPrefix(['build' + envConfig.postfix]));
+    /* let `serve`(nodemon) handle this
+      gulp.watch(jsSourceFiles, serverConfig.addPrefix(['build' + envConfig.postfix]));
+    */
     cb();
   });
 }

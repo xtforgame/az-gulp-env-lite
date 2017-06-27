@@ -20,6 +20,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function addServeTasks(serverConfig, commonLibraryConfig, envConfig) {
   var serverSourceDir = serverConfig.joinPathByKeys(['entry']);
+  var delay = serverConfig.get('reloadDelay') || 1000;
   var watchArray = [serverSourceDir];
   var useCommonLibrary = serverConfig.get('useCommonLibrary');
   if (commonLibraryConfig && useCommonLibrary) {
@@ -36,7 +37,8 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig) {
       script: outputEntryFile,
       watch: watchArray,
       ignore: [serverSourceDir + '/app-doc/', 'gulpfile.babel.js', 'node_modules/', 'doc/'],
-      tasks: reloadTasks
+      tasks: reloadTasks,
+      delay: delay
     }).on('start', function () {
       if (!called) {
         called = true;
