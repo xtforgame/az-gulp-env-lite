@@ -22,13 +22,9 @@
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
-    "gulp-mocha": "^3.0.1",
     "gulp-nodemon": "^2.1.0",
     "gulp-sourcemaps": "^1.6.0",
-    "object-path": "^0.11.2",
-    "run-sequence": "^1.2.2",
-    "watchify": "^3.7.0",
-    "yargs": "^5.0.0"
+    "object-path": "^0.11.2"
   },
   "devDependencies": {
     "app-root-path": "^1.0.0",
