@@ -22,6 +22,8 @@ var _gulpBabel2 = _interopRequireDefault(_gulpBabel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function addBuildCommonLibraryTasks(serverConfig, commonLibraryConfig, envConfig) {
   _gulp2.default.task(serverConfig.addPrefix('build:common' + envConfig.postfix), function () {
     var jsSourceFiles = commonLibraryConfig.joinPathByKeys(['entry', 'js', 'glob']);
@@ -48,7 +50,7 @@ function addBuildTasks(serverConfig, commonLibraryConfig, envConfig) {
 
   waitingTasks = serverConfig.addPrefix(waitingTasks);
 
-  _gulp2.default.task(serverConfig.addPrefix('build' + envConfig.postfix), waitingTasks, function () {
+  _gulp2.default.task(serverConfig.addPrefix('build' + envConfig.postfix), _gulp2.default.series(_gulp2.default.parallel.apply(_gulp2.default, _toConsumableArray(waitingTasks)), function () {
     var jsSourceFiles = serverConfig.joinPathByKeys(['entry', 'js', 'glob']);
     var jsOutputDir = envConfig.env.joinPathByKeys(['js']);
     return _gulp2.default.src(jsSourceFiles).pipe(_gulpSourcemaps2.default.init()).pipe((0, _gulpBabel2.default)({
@@ -56,7 +58,7 @@ function addBuildTasks(serverConfig, commonLibraryConfig, envConfig) {
       comments: false,
       compact: false
     })).pipe(_gulpSourcemaps2.default.write('.')).pipe(_gulp2.default.dest(jsOutputDir));
-  });
+  }));
 
   _gulp2.default.task(serverConfig.addPrefix('build:extras' + envConfig.postfix), function () {
     var serverSourceDir = serverConfig.joinPathByKeys(['entry']);

@@ -18,10 +18,8 @@ var _gulpBabel2 = _interopRequireDefault(_gulpBabel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function addTasks(gulpConfig) {
-  var libraryConfig = gulpConfig.getSubmodule('library');
-
-  _gulp2.default.task(libraryConfig.addPrefix('build'), function () {
+function addBuildTasks(libraryConfig, envConfig) {
+  _gulp2.default.task(libraryConfig.addPrefix('build' + envConfig.postfix), function () {
     var jsSourceFiles = libraryConfig.joinPathByKeys(['entry', 'js', 'glob']);
     var outputEnv = libraryConfig.getOutputDistEnv();
     var jsOutputDir = outputEnv.joinPathByKeys([]);
@@ -32,6 +30,15 @@ function addTasks(gulpConfig) {
     })).pipe(_gulp2.default.dest(jsOutputDir)).once('error', function (e) {
       console.error('build error :', e);
     });
+  });
+}
+
+function addTasks(gulpConfig) {
+  var libraryConfig = gulpConfig.getSubmodule('library');
+  var envConfigs = libraryConfig.getEnvConfigsForDevDist();
+
+  envConfigs.map(function (envConfig) {
+    return addBuildTasks(libraryConfig, envConfig);
   });
 }
 

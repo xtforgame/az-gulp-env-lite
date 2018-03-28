@@ -14,8 +14,8 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig){
 
   let outputEntryFile = envConfig.env.joinPathByKeys(['js', 'filename']);
   let reloadTasks = serverConfig.addPrefix(['build' + envConfig.postfix, 'build:extras' + envConfig.postfix]);
-  
-  gulp.task(serverConfig.addPrefix('serve' + envConfig.postfix), reloadTasks, function (cb) {
+
+  let mainFunc = function (cb) {
     let called = false;
     return nodemon({
       script: outputEntryFile,
@@ -40,7 +40,13 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig){
         // do some callback
       }, 1000);
     });
-  });
+  };
+  mainFunc.displayName = serverConfig.addPrefix('serve:<main>' + envConfig.postfix);
+
+  gulp.task(serverConfig.addPrefix('serve' + envConfig.postfix), gulp.series(
+    gulp.parallel(...reloadTasks),
+    mainFunc
+  ));
 }
 
 function addTasks(gulpConfig){

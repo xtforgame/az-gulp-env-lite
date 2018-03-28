@@ -76,12 +76,12 @@ let config = {
 
 let gulpConfig = new GulpConfig(config);
 
-serverTasks.addTasks(gulpConfig);
 libraryTasks.addTasks(gulpConfig);
+serverTasks.addTasks(gulpConfig);
 
-let serverConfig = gulpConfig.getSubmodule("server");
-gulp.task('watch', serverConfig.addPrefix(['watch']));
-gulp.task('build', serverConfig.addPrefix(['build']));
+let serverConfig = gulpConfig.getSubmodule('server');
+gulp.task('watch', gulp.series(serverConfig.addPrefix('watch')));
+gulp.task('build', gulp.series(serverConfig.addPrefix('build')));
 
 gulp.task('default', function() {
   console.log('Run "gulp watch or gulp build"');

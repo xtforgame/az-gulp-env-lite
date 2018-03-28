@@ -1,21 +1,21 @@
-import build from './build';
 import clean from './clean';
+import build from './build';
 import watch from './watch';
 
 var gulpModules = null;
 
-function addTasks(gulpConfig){
-  let children = gulpModules.children;
-  Object.keys(children).map(key => children[key].addTasks && children[key].addTasks(gulpConfig));
-}
-
-gulpModules = {
+export default  {
+  childList: [
+    'clean',
+    'build',
+    'watch',
+  ],
   children: {
-    build,
     clean,
+    build,
     watch,
   },
-  addTasks,
+  addTasks(gulpConfig){
+    this.childList.map(key => this.children[key].addTasks && this.children[key].addTasks(gulpConfig));
+  },
 };
-
-export default gulpModules;

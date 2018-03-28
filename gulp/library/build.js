@@ -2,11 +2,9 @@ import gulp from 'gulp';
 import sourcemaps from 'gulp-sourcemaps';
 import babel from 'gulp-babel';
 
-function addTasks(gulpConfig){
-  let libraryConfig = gulpConfig.getSubmodule('library');
-
+function addBuildTasks(libraryConfig, envConfig){
   //compile library scripts
-  gulp.task(libraryConfig.addPrefix('build'), /*libraryConfig.addPrefix([clean']),*/ () => {
+  gulp.task(libraryConfig.addPrefix('build' + envConfig.postfix), /*libraryConfig.addPrefix([clean']),*/ () => {
     let jsSourceFiles = libraryConfig.joinPathByKeys(['entry', 'js', 'glob']);
     let outputEnv = libraryConfig.getOutputDistEnv();
     let jsOutputDir = outputEnv.joinPathByKeys([]);
@@ -29,6 +27,13 @@ function addTasks(gulpConfig){
         console.error('build error :', e);
       });
   });
+}
+
+function addTasks(gulpConfig){
+  let libraryConfig = gulpConfig.getSubmodule('library');
+  let envConfigs = libraryConfig.getEnvConfigsForDevDist();
+
+  envConfigs.map(envConfig => addBuildTasks(libraryConfig, envConfig));
 }
 
 const gulpModules = {addTasks};

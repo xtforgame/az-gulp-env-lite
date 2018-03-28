@@ -36,7 +36,7 @@ function addBuildTasks(serverConfig, commonLibraryConfig, envConfig){
 
   waitingTasks = serverConfig.addPrefix(waitingTasks);
 
-  gulp.task(serverConfig.addPrefix('build' + envConfig.postfix), waitingTasks, () => {
+  let mainFunc = function () {
     let jsSourceFiles = serverConfig.joinPathByKeys(['entry', 'js', 'glob']);
     let jsOutputDir = envConfig.env.joinPathByKeys(['js']);
     return gulp.src(jsSourceFiles)
@@ -54,7 +54,13 @@ function addBuildTasks(serverConfig, commonLibraryConfig, envConfig){
       }))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(jsOutputDir));
-  });
+  };
+  mainFunc.displayName = serverConfig.addPrefix('build:<main>' + envConfig.postfix);
+
+  gulp.task(serverConfig.addPrefix('build' + envConfig.postfix), gulp.series(
+    gulp.parallel(...waitingTasks),
+    mainFunc
+  ));
 
   // prepare everything except js from server side for dev mode
   gulp.task(serverConfig.addPrefix('build:extras' + envConfig.postfix), /*['server:clean'],*/ () => {

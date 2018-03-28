@@ -4,13 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _build = require('./build');
-
-var _build2 = _interopRequireDefault(_build);
-
 var _clean = require('./clean');
 
 var _clean2 = _interopRequireDefault(_clean);
+
+var _build = require('./build');
+
+var _build2 = _interopRequireDefault(_build);
 
 var _watch = require('./watch');
 
@@ -20,20 +20,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var gulpModules = null;
 
-function addTasks(gulpConfig) {
-  var children = gulpModules.children;
-  Object.keys(children).map(function (key) {
-    return children[key].addTasks && children[key].addTasks(gulpConfig);
-  });
-}
-
-gulpModules = {
+exports.default = {
+  childList: ['clean', 'build', 'watch'],
   children: {
-    build: _build2.default,
     clean: _clean2.default,
+    build: _build2.default,
     watch: _watch2.default
   },
-  addTasks: addTasks
-};
+  addTasks: function addTasks(gulpConfig) {
+    var _this = this;
 
-exports.default = gulpModules;
+    this.childList.map(function (key) {
+      return _this.children[key].addTasks && _this.children[key].addTasks(gulpConfig);
+    });
+  }
+};

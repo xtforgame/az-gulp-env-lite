@@ -20,9 +20,9 @@
   "license": "MIT",
   "dependencies": {
     "del": "^2.2.2",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-babel": "^7.0.0",
-    "gulp-nodemon": "^2.1.0",
+    "gulp-nodemon": "git+https://github.com/xtforgame/gulp-nodemon#master",
     "gulp-sourcemaps": "^2.6.0",
     "object-path": "^0.11.0"
   },
