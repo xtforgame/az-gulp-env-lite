@@ -12,10 +12,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function addWatchTasks(libraryConfig, envConfig) {
   var jsSourceFiles = libraryConfig.joinPathByKeys(['entry', 'js', 'glob']);
-  _gulp2.default.task(libraryConfig.addPrefix('watch' + envConfig.postfix), _gulp2.default.series(libraryConfig.addPrefix('build' + envConfig.postfix), function (cb) {
-    _gulp2.default.watch(jsSourceFiles, libraryConfig.addPrefix(['build' + envConfig.postfix]));
+  var mainFunc = function mainFunc(cb) {
+    _gulp2.default.watch(jsSourceFiles, _gulp2.default.series(libraryConfig.addPrefix('build' + envConfig.postfix)));
     cb();
-  }));
+  };
+  mainFunc.displayName = libraryConfig.addPrefix('watch:<main>' + envConfig.postfix);
+
+  _gulp2.default.task(libraryConfig.addPrefix('watch' + envConfig.postfix), _gulp2.default.series(libraryConfig.addPrefix('build' + envConfig.postfix), mainFunc));
 }
 
 function addTasks(gulpConfig) {

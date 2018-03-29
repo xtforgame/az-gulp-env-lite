@@ -1,8 +1,12 @@
 import http from 'http';
 import express from 'express';
-import {ServerEnvName} from './azcommon/env';
+import moduleImportTest from '~/moduleImportTest';
+import {ServerEnvName} from 'azcommon/env';
+import {configMode} from 'config';
 
+moduleImportTest();
 console.log('ServerEnvName :', ServerEnvName);
+console.log('configMode :', configMode);
 
 let app = express();
 app.use(express.static(__dirname + '/public'));

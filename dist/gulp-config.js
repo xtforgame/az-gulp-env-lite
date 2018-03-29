@@ -63,6 +63,38 @@ var GulpConfig = exports.GulpConfig = function () {
       return this.getGulpPrefix(delimiter) + names;
     }
   }, {
+    key: 'getOptions',
+    value: function getOptions(envName) {
+      if (Array.isArray(envName)) {
+        for (var i = 0; i < envName.length; i++) {
+          var result = this.getOptions(envName[i]);
+          if (result) {
+            return result;
+          }
+        }
+        return null;
+      }
+      return this.get(['options', envName], null);
+    }
+  }, {
+    key: 'getOptionsDev',
+    value: function getOptionsDev(envName) {
+      return this.getOptions(['dev', 'default']);
+    }
+  }, {
+    key: 'getOptionsDist',
+    value: function getOptionsDist(envName) {
+      return this.getOptions(['dist', 'default']);
+    }
+  }, {
+    key: 'getOptionsForDevDist',
+    value: function getOptionsForDevDist() {
+      var optionsDev = this.getOptionsDev();
+      var optionsDist = this.getOptionsDist();
+
+      return [optionsDev, optionsDist];
+    }
+  }, {
     key: 'getOutputEnv',
     value: function getOutputEnv(envName) {
       if (Array.isArray(envName)) {
@@ -94,8 +126,8 @@ var GulpConfig = exports.GulpConfig = function () {
   }, {
     key: 'getEnvConfigsForDevDist',
     value: function getEnvConfigsForDevDist() {
+      var outputDevEnv = this.getOutputDevEnv();
       var outputDistEnv = this.getOutputDistEnv();
-      var outputDevEnv = this.getOutputDistEnv();
 
       return [{
         postfix: ':dev',

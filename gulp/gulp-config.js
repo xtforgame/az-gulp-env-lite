@@ -28,6 +28,37 @@ export class GulpConfig {
     return this.getGulpPrefix(delimiter) + names;
   }
 
+  getOptions(envName){
+    if(Array.isArray(envName)){
+      for(let i = 0; i < envName.length; i++) {
+        let result = this.getOptions(envName[i]);
+        if(result){
+          return result;
+        }
+      }
+      return null;
+    }
+    return this.get(['options', envName], null);
+  }
+
+  getOptionsDev(envName){
+    return this.getOptions(['dev', 'default']);
+  }
+
+  getOptionsDist(envName){
+    return this.getOptions(['dist', 'default']);
+  }
+
+  getOptionsForDevDist(){
+    let optionsDev = this.getOptionsDev();
+    let optionsDist = this.getOptionsDist();
+
+    return [
+      optionsDev,
+      optionsDist,
+    ];
+  }
+
   getOutputEnv(envName){
     if(Array.isArray(envName)){
       for(let i = 0; i < envName.length; i++) {
@@ -55,8 +86,8 @@ export class GulpConfig {
   }
 
   getEnvConfigsForDevDist(){
+    let outputDevEnv = this.getOutputDevEnv();
     let outputDistEnv = this.getOutputDistEnv();
-    let outputDevEnv = this.getOutputDistEnv();
 
     return [
       {

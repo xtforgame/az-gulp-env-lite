@@ -2,10 +2,16 @@ import gulp from 'gulp';
 
 function addWatchTasks(libraryConfig, envConfig){
   let jsSourceFiles = libraryConfig.joinPathByKeys(['entry', 'js', 'glob']);
-  gulp.task(libraryConfig.addPrefix('watch' + envConfig.postfix), gulp.series(libraryConfig.addPrefix('build' + envConfig.postfix), function(cb) {
-    gulp.watch(jsSourceFiles, libraryConfig.addPrefix(['build' + envConfig.postfix]));
+  let mainFunc = function(cb) {
+    gulp.watch(jsSourceFiles, gulp.series(libraryConfig.addPrefix('build' + envConfig.postfix)));
     cb();
-  }));
+  };
+  mainFunc.displayName = libraryConfig.addPrefix('watch:<main>' + envConfig.postfix);
+
+  gulp.task(libraryConfig.addPrefix('watch' + envConfig.postfix), gulp.series(
+    libraryConfig.addPrefix('build' + envConfig.postfix),
+    mainFunc
+  ));
 }
 
 function addTasks(gulpConfig){

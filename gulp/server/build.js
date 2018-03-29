@@ -3,34 +3,34 @@ import path from 'path';
 import sourcemaps from 'gulp-sourcemaps';
 import babel from 'gulp-babel';
 
-function addBuildCommonLibraryTasks(serverConfig, commonLibraryConfig, envConfig){
+function addBuildCommonLibraryTasks(serverConfig, commonLibraryConfig, envConfig, commonLibraryOptions = {}){
   // compile server side scripts
   gulp.task(serverConfig.addPrefix('build:common' + envConfig.postfix), () => {
     let jsSourceFiles = commonLibraryConfig.joinPathByKeys(['entry', 'js', 'glob']);
     let jsOutputDir = envConfig.env.joinPathByKeys(['js']);
     let relativePath = serverConfig.get(['useCommonLibrary', 'relativePath']);
-    
+
+    let babelOptions = Object.assign({}, {
+      //modules: 'amd',
+      moduleIds: false,
+      comments: false,
+      compact: false,
+    }, commonLibraryOptions.babel);
     return gulp.src(jsSourceFiles)
       //.pipe(plumber())
       .pipe(sourcemaps.init())
-      .pipe(babel({
-        //modules: 'amd',
-        moduleIds: false,
-        comments: false,
-        compact: false,
-        'plugins': ['transform-decorators-legacy', 'transform-class-properties'],
-      }))
+      .pipe(babel(babelOptions))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(path.join(jsOutputDir, relativePath)));
   });
 }
 
-function addBuildTasks(serverConfig, commonLibraryConfig, envConfig){
+function addBuildTasks(serverConfig, commonLibraryConfig, envConfig, serverOptions = {}, commonLibraryOptions = {}){
   let waitingTasks = [/*'clean'*/];
   let useCommonLibrary = serverConfig.get('useCommonLibrary');
 
   if(useCommonLibrary && commonLibraryConfig){
-    addBuildCommonLibraryTasks(serverConfig, commonLibraryConfig, envConfig);
+    addBuildCommonLibraryTasks(serverConfig, commonLibraryConfig, envConfig, commonLibraryOptions);
     waitingTasks.push('build:common' + envConfig.postfix);
   }
 
@@ -39,6 +39,7 @@ function addBuildTasks(serverConfig, commonLibraryConfig, envConfig){
   let mainFunc = function () {
     let jsSourceFiles = serverConfig.joinPathByKeys(['entry', 'js', 'glob']);
     let jsOutputDir = envConfig.env.joinPathByKeys(['js']);
+
     return gulp.src(jsSourceFiles)
       //.pipe(plumber())
       .pipe(sourcemaps.init())
@@ -47,10 +48,7 @@ function addBuildTasks(serverConfig, commonLibraryConfig, envConfig){
         moduleIds: false,
         comments: false,
         compact: false,
-        /*
-        'presets': ['es2015', 'react', 'stage-2'],
-        'plugins': ['transform-decorators-legacy', 'transform-class-properties'],
-        */
+        ...serverOptions.babel,
       }))
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(jsOutputDir));
@@ -80,8 +78,10 @@ function addTasks(gulpConfig){
   let serverConfig = gulpConfig.getSubmodule('server');
   let commonLibraryConfig = gulpConfig.getSubmodule('commonLibrary');
   let envConfigs = serverConfig.getEnvConfigsForDevDist();
+  let serverOptionsList = serverConfig.getOptionsForDevDist() || [];
+  let commonLibraryOptionsList = commonLibraryConfig.getOptionsForDevDist() || [];
 
-  envConfigs.map(envConfig => addBuildTasks(serverConfig, commonLibraryConfig, envConfig));
+  envConfigs.map((envConfig, i) => addBuildTasks(serverConfig, commonLibraryConfig, envConfig, serverOptionsList[i] || {}, commonLibraryOptionsList[i] || {}));
 }
 
 const gulpModules = {addTasks};

@@ -14,9 +14,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function addWatchTasks(serverConfig, envConfig) {
   var jsSourceFiles = serverConfig.joinPathByKeys(['entry', 'js', 'glob']);
-  _gulp2.default.task(serverConfig.addPrefix('watch' + envConfig.postfix), _gulp2.default.series(_gulp2.default.parallel.apply(_gulp2.default, _toConsumableArray(serverConfig.addPrefix(['serve' + envConfig.postfix]))), function (cb) {
+  var mainFunc = function mainFunc(cb) {
     cb();
-  }));
+  };
+  mainFunc.displayName = serverConfig.addPrefix('watch:<main>' + envConfig.postfix);
+
+  _gulp2.default.task(serverConfig.addPrefix('watch' + envConfig.postfix), _gulp2.default.series(_gulp2.default.parallel.apply(_gulp2.default, _toConsumableArray(serverConfig.addPrefix(['serve' + envConfig.postfix]))), mainFunc));
 }
 
 function addTasks(gulpConfig) {

@@ -14,11 +14,21 @@ var _del2 = _interopRequireDefault(_del);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function addCleanTasks(libraryConfig, envConfig) {
+  var outputDistEnv = libraryConfig.getOutputDistEnv();
+  var outputDir = envConfig.env.joinPathByKeys([]);
+
+  _gulp2.default.task(libraryConfig.addPrefix('clean' + envConfig.postfix), function (cb) {
+    return (0, _del2.default)([outputDir]);
+  });
+}
+
 function addTasks(gulpConfig) {
   var libraryConfig = gulpConfig.getSubmodule('library');
+  var envConfigs = libraryConfig.getEnvConfigsForDevDist();
 
-  _gulp2.default.task(libraryConfig.addPrefix('clean'), function (cb) {
-    return;
+  envConfigs.map(function (envConfig, i) {
+    return addCleanTasks(libraryConfig, envConfig);
   });
 }
 

@@ -1,0 +1,32 @@
+{
+  "presets": ["es2015"],
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-class-properties",
+    "transform-object-rest-spread"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        ["module-resolver", {
+          "alias": {
+            "~": "./server",
+            "azcommon": "./server/azcommon",
+            "config": "./server/core/config"
+          }
+        }]
+      ]
+    },
+    "production": {
+      "plugins": [
+        ["module-resolver", {
+          "alias": {
+            "~": "./server",
+            "azcommon": "./server/azcommon",
+            "config": "./server/core/config"
+          }
+        }]
+      ]
+    }
+  }
+}

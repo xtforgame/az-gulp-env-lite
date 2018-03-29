@@ -1,16 +1,20 @@
 import gulp from 'gulp';
 import del from 'del';
 
+function addCleanTasks(serverConfig, envConfig){
+  let outputDistEnv = serverConfig.getOutputDistEnv();
+  let outputDir = envConfig.env.joinPathByKeys([]);
+
+  gulp.task(serverConfig.addPrefix('clean' + envConfig.postfix), function(cb) {
+    return del([outputDir]);
+  });
+}
+
 function addTasks(gulpConfig){
   let serverConfig = gulpConfig.getSubmodule('server');
-  // let outputDistEnv = serverConfig.getOutputDistEnv();
-  // let outputDevEnv = serverConfig.getOutputDistEnv();
-  // let outputDistPath = outputDistEnv.joinPathByKeys(['js']);
-  // let outputDevPath = outputDevEnv.joinPathByKeys(['js']);
-  // gulp.task(serverConfig.addPrefix('clean'), del.bind(null, [outputDistPath, outputDevPath]));
-  gulp.task(serverConfig.addPrefix('clean'), function(cb) {
-    return;
-  });
+  let envConfigs = serverConfig.getEnvConfigsForDevDist();
+
+  envConfigs.map((envConfig, i) => addCleanTasks(serverConfig, envConfig));
 }
 
 const gulpModules = {addTasks};

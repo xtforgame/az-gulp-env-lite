@@ -2,7 +2,7 @@ import path from 'path';
 import gulp from 'gulp';
 import nodemon from 'gulp-nodemon';
 
-function addServeTasks(serverConfig, commonLibraryConfig, envConfig){
+function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptions = {}){
   let serverSourceDir = serverConfig.joinPathByKeys(['entry']);
   let delay = serverConfig.get('reloadDelay') || 1000;
   let watchArray = [serverSourceDir]
@@ -28,6 +28,7 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig){
       ],
       tasks: reloadTasks,
       delay,
+      ...serverOptions.nodemon,
     })
     .on('start', function () {
       if (!called) {
@@ -44,6 +45,7 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig){
   mainFunc.displayName = serverConfig.addPrefix('serve:<main>' + envConfig.postfix);
 
   gulp.task(serverConfig.addPrefix('serve' + envConfig.postfix), gulp.series(
+    serverConfig.addPrefix('clean' + envConfig.postfix),
     gulp.parallel(...reloadTasks),
     mainFunc
   ));
@@ -53,8 +55,9 @@ function addTasks(gulpConfig){
   let serverConfig = gulpConfig.getSubmodule('server');
   let commonLibraryConfig = gulpConfig.getSubmodule('commonLibrary');
   let envConfigs = serverConfig.getEnvConfigsForDevDist();
+  let serverOptionsList = serverConfig.getOptionsForDevDist() || [];
 
-  envConfigs.map(envConfig => addServeTasks(serverConfig, commonLibraryConfig, envConfig));
+  envConfigs.map((envConfig, i) => addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptionsList[i] || {}));
 }
 
 const gulpModules = {addTasks};

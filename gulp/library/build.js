@@ -2,12 +2,13 @@ import gulp from 'gulp';
 import sourcemaps from 'gulp-sourcemaps';
 import babel from 'gulp-babel';
 
-function addBuildTasks(libraryConfig, envConfig){
+function addBuildTasks(libraryConfig, envConfig, libraryOptions = {}){
   //compile library scripts
   gulp.task(libraryConfig.addPrefix('build' + envConfig.postfix), /*libraryConfig.addPrefix([clean']),*/ () => {
     let jsSourceFiles = libraryConfig.joinPathByKeys(['entry', 'js', 'glob']);
     let outputEnv = libraryConfig.getOutputDistEnv();
     let jsOutputDir = outputEnv.joinPathByKeys([]);
+
     return gulp.src(jsSourceFiles)
       //.pipe(plumber())
       //.pipe(sourcemaps.init())
@@ -16,10 +17,7 @@ function addBuildTasks(libraryConfig, envConfig){
         moduleIds: false,
         comments: false,
         compact: false,
-        /*
-        'presets': ['es2015', 'react', 'stage-2'],
-        'plugins': ['transform-decorators-legacy', 'transform-class-properties'],
-        */
+        ...libraryOptions.babel,
       }))
       //.pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(jsOutputDir))
@@ -32,8 +30,9 @@ function addBuildTasks(libraryConfig, envConfig){
 function addTasks(gulpConfig){
   let libraryConfig = gulpConfig.getSubmodule('library');
   let envConfigs = libraryConfig.getEnvConfigsForDevDist();
+  let libraryOptionsList = libraryConfig.getOptionsForDevDist() || [];
 
-  envConfigs.map(envConfig => addBuildTasks(libraryConfig, envConfig));
+  envConfigs.map((envConfig, i) => addBuildTasks(libraryConfig, envConfig, libraryOptionsList[i] || {}));
 }
 
 const gulpModules = {addTasks};

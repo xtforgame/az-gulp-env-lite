@@ -1,11 +1,11 @@
 {
   "name": "az-gulp-env-lite",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
   "description": "Gulp environment for server-side app with node.js6.x + babel6.x",
   "main": "dist/index.js",
   "scripts": {
-    "start": "gulp server:watch",
-    "build": "eslint gulp && gulp library:build",
+    "start": "cross-env NODE_ENV=development gulp watch",
+    "build": "cross-env NODE_ENV=production eslint gulp && cross-env NODE_ENV=production gulp build",
     "test": "cross-env NODE_ENV=test eslint ./test && mocha --compilers js:babel-core/register ./test/**/*.spec.js"
   },
   "repository": {
@@ -30,6 +30,7 @@
     "app-root-path": "^1.0.0",
     "babel-core": "^6.14.0",
     "babel-eslint": "^6.1.2",
+    "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",

@@ -23,11 +23,18 @@ let config = {
           js: {},
         },
       },
+      options: {
+        default: {
+          babel: {},
+        },
+        //dev: {},
+        //dist: {},
+      },
     },
     server: {
       prefix: 'server',
       useCommonLibrary: {
-        relativePath: 'azcommon'
+        relativePath: 'azcommon',
       },
       entry: {
         dir: 'server',
@@ -54,6 +61,16 @@ let config = {
         //dev: {},
         //dist: {},
       },
+      options: {
+        default: {
+          babel: {},
+          nodemon: {
+            ext: 'js,html',
+          },
+        },
+        //dev: {},
+        //dist: {},
+      },
     },
     library: {
       prefix: 'library',
@@ -70,6 +87,13 @@ let config = {
         //dev: {},
         //dist: {},
       },
+      options: {
+        default: {
+          babel: {},
+        },
+        //dev: {},
+        //dist: {},
+      },
     },
   },
 };
@@ -80,8 +104,11 @@ libraryTasks.addTasks(gulpConfig);
 serverTasks.addTasks(gulpConfig);
 
 let serverConfig = gulpConfig.getSubmodule('server');
-gulp.task('watch', gulp.series(serverConfig.addPrefix('watch')));
-gulp.task('build', gulp.series(serverConfig.addPrefix('build')));
+gulp.task('watch', gulp.series(serverConfig.addPrefix('watch:dev')));
+
+let libraryConfig = gulpConfig.getSubmodule('library');
+gulp.task('build', gulp.series(libraryConfig.addPrefix('clean'), libraryConfig.addPrefix('build')));
+
 
 gulp.task('default', function() {
   console.log('Run "gulp watch or gulp build"');

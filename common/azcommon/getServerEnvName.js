@@ -9,10 +9,4 @@ please DO NOT put any sensitive information here.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
 
-import getServerEnvName from '~/getServerEnvName';
-
-let ServerEnvName = getServerEnvName();
-
-export {
-  ServerEnvName as ServerEnvName,
-}
+export default () => 'test-server';
