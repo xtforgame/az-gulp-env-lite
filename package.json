@@ -1,12 +1,13 @@
 {
   "name": "az-gulp-env-lite",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Gulp environment for server-side app with node.js6.x + babel6.x",
   "main": "dist/index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development gulp watch",
+    "debug": "cross-env NODE_ENV=development gulp watch --inspect",
     "build": "cross-env NODE_ENV=production eslint gulp && cross-env NODE_ENV=production gulp build",
-    "test": "cross-env NODE_ENV=test eslint ./test && mocha --compilers js:babel-core/register ./test/**/*.spec.js"
+    "test": "cross-env NODE_ENV=test eslint ./test && mocha --require babel-core/register ./test/**/*.spec.js"
   },
   "repository": {
     "type": "git"
@@ -24,7 +25,8 @@
     "gulp-babel": "^7.0.0",
     "gulp-nodemon": "git+https://github.com/xtforgame/gulp-nodemon#master",
     "gulp-sourcemaps": "^2.6.0",
-    "object-path": "^0.11.0"
+    "object-path": "^0.11.0",
+    "yargs": "^12.0.1"
   },
   "devDependencies": {
     "app-root-path": "^1.0.0",
@@ -39,6 +41,6 @@
     "cross-env": "^3.2.4",
     "eslint": "^3.17.0",
     "express": "^4.13.4",
-    "mocha": "^3.0.2"
+    "mocha": "^5.2.0"
   }
 }

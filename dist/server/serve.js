@@ -18,6 +18,10 @@ var _gulpNodemon = require('gulp-nodemon');
 
 var _gulpNodemon2 = _interopRequireDefault(_gulpNodemon);
 
+var _yargs = require('yargs');
+
+var _yargs2 = _interopRequireDefault(_yargs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -38,14 +42,18 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig) {
   var reloadTasks = serverConfig.addPrefix(['build' + envConfig.postfix, 'build:extras' + envConfig.postfix]);
 
   var mainFunc = function mainFunc(cb) {
-    var called = false;
-    return (0, _gulpNodemon2.default)(_extends({
+    var nodemonConfig = _extends({
       script: outputEntryFile,
       watch: watchArray,
       ignore: [serverSourceDir + '/app-doc/', 'gulpfile.babel.js', 'node_modules/', 'doc/'],
       tasks: reloadTasks,
       delay: delay
-    }, serverOptions.nodemon)).on('start', function () {
+    }, serverOptions.nodemon);
+    if (_yargs2.default.argv.inspect) {
+      nodemonConfig.exec = 'node --inspect';
+    }
+    var called = false;
+    return (0, _gulpNodemon2.default)(nodemonConfig).on('start', function () {
       if (!called) {
         called = true;
         cb();

@@ -1,6 +1,7 @@
 import path from 'path';
 import gulp from 'gulp';
 import nodemon from 'gulp-nodemon';
+import yargs from 'yargs';
 
 function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptions = {}){
   let serverSourceDir = serverConfig.joinPathByKeys(['entry']);
@@ -16,8 +17,7 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptio
   let reloadTasks = serverConfig.addPrefix(['build' + envConfig.postfix, 'build:extras' + envConfig.postfix]);
 
   let mainFunc = function (cb) {
-    let called = false;
-    return nodemon({
+    let nodemonConfig = {
       script: outputEntryFile,
       watch: watchArray,
       ignore: [
@@ -29,7 +29,12 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptio
       tasks: reloadTasks,
       delay,
       ...serverOptions.nodemon,
-    })
+    };
+    if(yargs.argv.inspect){
+      nodemonConfig.exec = 'node --inspect';
+    }
+    let called = false;
+    return nodemon(nodemonConfig)
     .on('start', function () {
       if (!called) {
         called = true;
