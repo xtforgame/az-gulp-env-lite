@@ -1,8 +1,25 @@
 import path from 'path';
 import objPath from 'object-path';
 
+export interface EnvConfig {
+  postfix: string;
+  env: any;
+}
+
+export interface GulpModule {
+  addTasks: (gulpConfig : GulpConfig) => void;
+}
+
+export type GulpModuleMap = { [index:string] : GulpModule };
+
 export class GulpConfig {
-  constructor(config, parent = null, name = null, paths = []){
+  config: any;
+  parent: GulpConfig | null;
+  name: string | null;
+  paths: Array<string>;
+  entry: any;
+
+  constructor(config: any, parent: GulpConfig | null = null, name: string | null = null, paths: Array<string> = []){
     this.config = config;
     this.parent = parent;
     this.name = name;
@@ -10,7 +27,7 @@ export class GulpConfig {
     this.entry = objPath.get(this.config, this.paths);
   }
 
-  getGulpPrefix(delimiter = ':'){
+  getGulpPrefix(delimiter: string = ':'){
     if(!this.parent){
       let prefix = this.get(['prefix'], null);
       if(prefix){
@@ -21,17 +38,17 @@ export class GulpConfig {
     return this.get(['prefix'], this.name) + delimiter;
   }
 
-  addPrefix(names, delimiter = ':'){
+  addPrefix(names: string | Array<string>, delimiter: string | undefined = ':') : (string | Array<string>) {
     if(Array.isArray(names)){
-      return names.map(name => this.addPrefix(name, delimiter));
+      return names.map(name => <string>this.addPrefix(name, delimiter));
     }
     return this.getGulpPrefix(delimiter) + names;
   }
 
-  getOptions(envName){
+  getOptions(envName: string | Array<string>) : string | null{
     if(Array.isArray(envName)){
       for(let i = 0; i < envName.length; i++) {
-        let result = this.getOptions(envName[i]);
+        let result : string | null = this.getOptions(envName[i]);
         if(result){
           return result;
         }
@@ -41,15 +58,15 @@ export class GulpConfig {
     return this.get(['options', envName], null);
   }
 
-  getOptionsDev(envName){
+  getOptionsDev(envName?: string){
     return this.getOptions(['dev', 'default']);
   }
 
-  getOptionsDist(envName){
+  getOptionsDist(envName?: string){
     return this.getOptions(['dist', 'default']);
   }
 
-  getOptionsForDevDist(){
+  getOptionsForDevDist() : [string | null, string | null]{
     let optionsDev = this.getOptionsDev();
     let optionsDist = this.getOptionsDist();
 
@@ -59,7 +76,7 @@ export class GulpConfig {
     ];
   }
 
-  getOutputEnv(envName){
+  getOutputEnv(envName: string | Array<string>) : GulpConfig | null {
     if(Array.isArray(envName)){
       for(let i = 0; i < envName.length; i++) {
         let result = this.getOutputEnv(envName[i]);
@@ -85,7 +102,7 @@ export class GulpConfig {
     return this.getOutputEnv(['dist', 'default']);
   }
 
-  getEnvConfigsForDevDist(){
+  getEnvConfigsForDevDist() : [EnvConfig, EnvConfig]{
     let outputDevEnv = this.getOutputDevEnv();
     let outputDistEnv = this.getOutputDistEnv();
 
@@ -101,7 +118,7 @@ export class GulpConfig {
     ];
   }
 
-  getSubmodule(submoduleName){
+  getSubmodule(submoduleName : string){
     let submoduleData = this.get(['submodules', submoduleName], null);
     if(submoduleData){
       let paths = this.paths.concat(['submodules', submoduleName]);
@@ -110,7 +127,7 @@ export class GulpConfig {
     return null;
   }
 
-  joinPathByKeys(_keys, ...otherDirs){
+  joinPathByKeys(_keys : Array<string>, ...otherDirs : Array<any>){
     let keys = this.paths.concat(_keys);
     let result = '';
     let iterator = this.config;
@@ -132,11 +149,11 @@ export class GulpConfig {
     return path.join(result, ...otherDirs).replace(/\\/g, '/');
   }
 
-  coalesce(...args){
+  coalesce(...args : Array<any>) : any {
     return objPath.coalesce(this.entry, ...args);
   }
 
-  get(...args){
+  get(...args : Array<any>) : any {
     return objPath.get(this.entry, ...args);
   }
 }

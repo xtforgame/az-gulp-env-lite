@@ -1,6 +1,6 @@
 import {GulpConfig} from '~/gulp-config';
-import serverTasks from '~/server';
-import libraryTasks from '~/library';
+import serverTasks from '~/server/index';
+import libraryTasks from '~/library/index';
 
 export {
   GulpConfig as GulpConfig,

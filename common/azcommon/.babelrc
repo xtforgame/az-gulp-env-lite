@@ -1,9 +1,18 @@
 {
-  "presets": ["es2015"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": { 
+          "node": "8"
+        }
+      }
+    ],
+    "@babel/typescript",
+  ],
   "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "transform-object-rest-spread"
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread"
   ],
   "env": {
     "development": {
@@ -11,7 +20,8 @@
         ["module-resolver", {
           "alias": {
             "~": "./common/azcommon"
-          }
+          },
+          "extensions": [".js", ".ts"]
         }]
       ]
     },
@@ -20,7 +30,8 @@
         ["module-resolver", {
           "alias": {
             "~": "./common/azcommon"
-          }
+          },
+          "extensions": [".js", ".ts"]
         }]
       ]
     }

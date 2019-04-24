@@ -2,8 +2,9 @@ import path from 'path';
 import gulp from 'gulp';
 import nodemon from 'gulp-nodemon';
 import yargs from 'yargs';
+import { GulpConfig, EnvConfig } from '../gulp-config';
 
-function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptions = {}){
+function addServeTasks(serverConfig : GulpConfig, commonLibraryConfig : GulpConfig | null = null, envConfig : EnvConfig, serverOptions = {}){
   let serverSourceDir = serverConfig.joinPathByKeys(['entry']);
   let delay = serverConfig.get('reloadDelay') || 1000;
   let watchArray = [serverSourceDir]
@@ -16,7 +17,7 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptio
   let outputEntryFile = envConfig.env.joinPathByKeys(['js', 'filename']);
   let reloadTasks = serverConfig.addPrefix(['build' + envConfig.postfix, 'build:extras' + envConfig.postfix]);
 
-  let mainFunc = function (cb) {
+  let mainFunc = function (cb : () => void) {
     let nodemonConfig = {
       script: outputEntryFile,
       watch: watchArray,
@@ -28,7 +29,7 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptio
       ],
       tasks: reloadTasks,
       delay,
-      ...serverOptions.nodemon,
+      ...(<any>serverOptions).nodemon,
     };
     if(yargs.argv.inspect){
       nodemonConfig.exec = 'node --inspect';
@@ -47,22 +48,22 @@ function addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptio
       }, 1000);
     });
   };
-  mainFunc.displayName = serverConfig.addPrefix('serve:<main>' + envConfig.postfix);
+  (<any>mainFunc).displayName = serverConfig.addPrefix('serve:<main>' + envConfig.postfix);
 
   gulp.task(serverConfig.addPrefix('serve' + envConfig.postfix), gulp.series(
     serverConfig.addPrefix('clean' + envConfig.postfix),
-    gulp.parallel(...reloadTasks),
+    gulp.parallel(...<Array<string>>reloadTasks),
     mainFunc
   ));
 }
 
-function addTasks(gulpConfig){
-  let serverConfig = gulpConfig.getSubmodule('server');
+function addTasks(gulpConfig : GulpConfig){
+  let serverConfig = <GulpConfig>gulpConfig.getSubmodule('server');
   let commonLibraryConfig = gulpConfig.getSubmodule('commonLibrary');
   let envConfigs = serverConfig.getEnvConfigsForDevDist();
   let serverOptionsList = serverConfig.getOptionsForDevDist() || [];
 
-  envConfigs.map((envConfig, i) => addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptionsList[i] || {}));
+  envConfigs.map((envConfig : EnvConfig, i) => addServeTasks(serverConfig, commonLibraryConfig, envConfig, serverOptionsList[i] || {}));
 }
 
 const gulpModules = {addTasks};

@@ -1,8 +1,8 @@
 import gulp from 'gulp';
 import path from 'path';
-import {GulpConfig} from './gulp/gulp-config';
-import serverTasks from './gulp/server';
-import libraryTasks from './gulp/library';
+import {GulpConfig} from './dist/gulp-config';
+import serverTasks from './dist/server';
+import libraryTasks from './dist/library';
 
 const projRoot  = path.resolve(__dirname);
 let config = {
@@ -15,7 +15,11 @@ let config = {
         dir: 'common',
         js: {
           dir: 'azcommon',
-          glob: '**/*.js',
+          glob: '**/*.{js,ts}',
+        },
+        ts: {
+          tsconfig: 'tsconfig.json',
+          glob: '**/*.ts',
         },
       },
       output: {
@@ -39,7 +43,11 @@ let config = {
       entry: {
         dir: 'server',
         js: {
-          glob: '**/*.js',
+          glob: '**/*.{js,ts}',
+        },
+        ts: {
+          tsconfig: 'tsconfig.json',
+          glob: '**/*.ts',
         },
       },
       output: {
@@ -65,7 +73,7 @@ let config = {
         default: {
           babel: {},
           nodemon: {
-            ext: 'js,html',
+            ext: 'js,html,ts',
           },
         },
         //dev: {},
@@ -77,7 +85,11 @@ let config = {
       entry: {
         dir: 'gulp',
         js: {
-          glob: '**/*.js',
+          glob: '**/*.{js,ts}',
+        },
+        ts: {
+          tsconfig: 'tsconfig.json',
+          glob: '**/*.ts',
         },
       },
       output: {

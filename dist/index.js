@@ -1,22 +1,31 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.libraryTasks = exports.serverTasks = exports.GulpConfig = undefined;
+Object.defineProperty(exports, "GulpConfig", {
+  enumerable: true,
+  get: function get() {
+    return _gulpConfig.GulpConfig;
+  }
+});
+Object.defineProperty(exports, "serverTasks", {
+  enumerable: true,
+  get: function get() {
+    return _server["default"];
+  }
+});
+Object.defineProperty(exports, "libraryTasks", {
+  enumerable: true,
+  get: function get() {
+    return _library["default"];
+  }
+});
 
-var _gulpConfig = require('./gulp-config');
+var _gulpConfig = require("./gulp-config");
 
-var _server = require('./server');
+var _server = _interopRequireDefault(require("./server"));
 
-var _server2 = _interopRequireDefault(_server);
+var _library = _interopRequireDefault(require("./library"));
 
-var _library = require('./library');
-
-var _library2 = _interopRequireDefault(_library);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.GulpConfig = _gulpConfig.GulpConfig;
-exports.serverTasks = _server2.default;
-exports.libraryTasks = _library2.default;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }

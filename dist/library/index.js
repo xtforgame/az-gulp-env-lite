@@ -1,32 +1,26 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-var _clean = require('./clean');
+var _clean = _interopRequireDefault(require("./clean"));
 
-var _clean2 = _interopRequireDefault(_clean);
+var _build = _interopRequireDefault(require("./build"));
 
-var _build = require('./build');
+var _watch = _interopRequireDefault(require("./watch"));
 
-var _build2 = _interopRequireDefault(_build);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _watch = require('./watch');
-
-var _watch2 = _interopRequireDefault(_watch);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var gulpModules = null;
-
-exports.default = {
+var children = {
+  clean: _clean["default"],
+  build: _build["default"],
+  watch: _watch["default"]
+};
+var _default = {
   childList: ['clean', 'build', 'watch'],
-  children: {
-    clean: _clean2.default,
-    build: _build2.default,
-    watch: _watch2.default
-  },
+  children: children,
   addTasks: function addTasks(gulpConfig) {
     var _this = this;
 
@@ -35,3 +29,4 @@ exports.default = {
     });
   }
 };
+exports["default"] = _default;

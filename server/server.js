@@ -1,10 +1,12 @@
 import http from 'http';
 import express from 'express';
 import moduleImportTest from '~/moduleImportTest';
+import tsModuleImportTest from '~/tsModuleImportTest';
 import {ServerEnvName} from 'azcommon/env';
 import {configMode} from 'config';
 
 moduleImportTest();
+tsModuleImportTest();
 console.log('ServerEnvName :', ServerEnvName);
 console.log('configMode :', configMode);
 

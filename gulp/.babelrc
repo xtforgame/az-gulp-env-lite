@@ -1,9 +1,19 @@
 {
-  "presets": ["es2015"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": { 
+          "node": "8"
+        },
+        "forceAllTransforms": true
+      }
+    ],
+    "@babel/typescript",
+  ],
   "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "transform-object-rest-spread"
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread"
   ],
   "env": {
     "development": {
@@ -11,7 +21,8 @@
         ["module-resolver", {
           "alias": {
             "~": "./gulp"
-          }
+          },
+          "extensions": [".js", ".ts"]
         }]
       ]
     },
@@ -20,7 +31,8 @@
         ["module-resolver", {
           "alias": {
             "~": "./gulp"
-          }
+          },
+          "extensions": [".js", ".ts"]
         }]
       ]
     }

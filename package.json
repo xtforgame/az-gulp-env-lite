@@ -3,11 +3,13 @@
   "version": "1.0.0-alpha.2",
   "description": "Gulp environment for server-side app with node.js6.x + babel6.x",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "start": "cross-env NODE_ENV=development gulp watch",
     "debug": "cross-env NODE_ENV=development gulp watch --inspect",
-    "build": "cross-env NODE_ENV=production eslint gulp && cross-env NODE_ENV=production gulp build",
-    "test": "cross-env NODE_ENV=test eslint ./test && mocha --require babel-core/register ./test/**/*.spec.js"
+    "build": "cross-env NODE_ENV=production eslint gulp && cross-env NODE_ENV=production gulp build --extensions \"ts\"",
+    "test": "cross-env NODE_ENV=test eslint ./test && mocha --require @babel/register ./test/**/*.spec.js",
+    "build:types": "tsc --p gulp/tsconfig.json --emitDeclarationOnly"
   },
   "repository": {
     "type": "git"
@@ -21,26 +23,29 @@
   "license": "MIT",
   "dependencies": {
     "del": "^2.2.2",
-    "gulp": "^4.0.0",
-    "gulp-babel": "^7.0.0",
+    "gulp": "^4.0.1",
+    "gulp-babel": "^8.0.0",
     "gulp-nodemon": "git+https://github.com/xtforgame/gulp-nodemon#master",
     "gulp-sourcemaps": "^2.6.0",
     "object-path": "^0.11.0",
     "yargs": "^12.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.3.3",
+    "@babel/register": "^7.4.0",
     "app-root-path": "^1.0.0",
-    "babel-core": "^6.14.0",
     "babel-eslint": "^6.1.2",
     "babel-plugin-module-resolver": "^3.1.1",
-    "babel-plugin-transform-class-properties": "^6.11.5",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-es2015": "^6.14.0",
     "chai": "^3.5.0",
     "cross-env": "^3.2.4",
     "eslint": "^3.17.0",
     "express": "^4.13.4",
-    "mocha": "^5.2.0"
+    "gulp-typescript": "^5.0.1",
+    "mocha": "^5.2.0",
+    "typescript": "^3.4.4"
   }
 }
