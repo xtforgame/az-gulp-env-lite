@@ -16,7 +16,10 @@ function addBuildCommonLibraryDtsTask(serverConfig : GulpConfig, commonLibraryCo
     let tsOutputDir = envConfig.env.joinPathByKeys(['js']);
     let relativePath = serverConfig.get(['useCommonLibrary', 'relativePath']);
 
-    const tsProject = ts.createProject(tsconfig);
+    const tsProject = ts.createProject(tsconfig, {
+      allowJs: false,
+      declaration: true,
+    });
     const tsResult = tsProject.src()
     .pipe(tsProject());
 
@@ -57,7 +60,10 @@ function addBuildServerDtsTask(serverConfig : GulpConfig, envConfig : EnvConfig)
     let tsconfig = serverConfig.joinPathByKeys(['entry', 'ts', 'tsconfig']);
     let tsOutputDir = envConfig.env.joinPathByKeys(['js']);
 
-    const tsProject = ts.createProject(tsconfig);
+    const tsProject = ts.createProject(tsconfig, {
+      allowJs: false,
+      declaration: true,
+    });
     const tsResult = tsProject.src()
     .pipe(tsProject());
 

@@ -16,7 +16,10 @@ function addBuildDtsTask(libraryConfig : GulpConfig, envConfig : EnvConfig, libr
     let outputEnv = <GulpConfig>libraryConfig.getOutputDistEnv();
     let tsOutputDir = outputEnv.joinPathByKeys([]);
 
-    const tsProject = ts.createProject(tsconfig);
+    const tsProject = ts.createProject(tsconfig, {
+      allowJs: false,
+      declaration: true,
+    });
     const tsResult = tsProject.src()
     .pipe(tsProject());
 

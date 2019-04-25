@@ -40,7 +40,10 @@ function addBuildCommonLibraryDtsTask(serverConfig, commonLibraryConfig, envConf
     var tsconfig = commonLibraryConfig.joinPathByKeys(['entry', 'ts', 'tsconfig']);
     var tsOutputDir = envConfig.env.joinPathByKeys(['js']);
     var relativePath = serverConfig.get(['useCommonLibrary', 'relativePath']);
-    var tsProject = ts.createProject(tsconfig);
+    var tsProject = ts.createProject(tsconfig, {
+      allowJs: false,
+      declaration: true
+    });
     var tsResult = tsProject.src().pipe(tsProject());
     return tsResult.dts.pipe(_gulp["default"].dest(_path["default"].join(tsOutputDir, relativePath)));
   });
@@ -72,7 +75,10 @@ function addBuildServerDtsTask(serverConfig, envConfig) {
   _gulp["default"].task(serverConfig.addPrefix('build:dts' + envConfig.postfix), function () {
     var tsconfig = serverConfig.joinPathByKeys(['entry', 'ts', 'tsconfig']);
     var tsOutputDir = envConfig.env.joinPathByKeys(['js']);
-    var tsProject = ts.createProject(tsconfig);
+    var tsProject = ts.createProject(tsconfig, {
+      allowJs: false,
+      declaration: true
+    });
     var tsResult = tsProject.src().pipe(tsProject());
     return tsResult.dts.pipe(_gulp["default"].dest(tsOutputDir));
   });

@@ -36,7 +36,10 @@ function addBuildDtsTask(libraryConfig, envConfig) {
     var tsconfig = libraryConfig.joinPathByKeys(['entry', 'ts', 'tsconfig']);
     var outputEnv = libraryConfig.getOutputDistEnv();
     var tsOutputDir = outputEnv.joinPathByKeys([]);
-    var tsProject = ts.createProject(tsconfig);
+    var tsProject = ts.createProject(tsconfig, {
+      allowJs: false,
+      declaration: true
+    });
     var tsResult = tsProject.src().pipe(tsProject());
     return tsResult.dts.pipe(_gulp["default"].dest(tsOutputDir));
   });
