@@ -113,10 +113,14 @@ function addBuildTasks(serverConfig : GulpConfig, commonLibraryConfig : GulpConf
   };
   (<any>mainFunc).displayName = serverConfig.addPrefix('build:<main>' + envConfig.postfix);
 
-  gulp.task(serverConfig.addPrefix('build' + envConfig.postfix), gulp.series(
-    gulp.parallel(...waitingTasks),
-    mainFunc
-  ));
+  if (waitingTasks.length > 0) {
+    gulp.task(serverConfig.addPrefix('build' + envConfig.postfix), gulp.series(
+      gulp.parallel(...waitingTasks),
+      mainFunc
+    ));
+  } else {
+    gulp.task(serverConfig.addPrefix('build' + envConfig.postfix), mainFunc);
+  }
 
   // prepare everything except js from server side for dev mode
   gulp.task(serverConfig.addPrefix('build:extras' + envConfig.postfix), /*['server:clean'],*/ () => {

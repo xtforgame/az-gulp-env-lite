@@ -62,10 +62,14 @@ function addBuildTasks(libraryConfig : GulpConfig, envConfig : EnvConfig, librar
   (<any>mainFunc).displayName = libraryConfig.addPrefix('build:<main>' + envConfig.postfix);
 
   //compile library scripts
-  gulp.task(libraryConfig.addPrefix('build' + envConfig.postfix), gulp.series(
-    gulp.parallel(...waitingTasks),
-    mainFunc
-  ));
+  if (waitingTasks.length > 0) {
+    gulp.task(libraryConfig.addPrefix('build' + envConfig.postfix), gulp.series(
+      gulp.parallel(...waitingTasks),
+      mainFunc
+    ));
+  } else {
+    gulp.task(libraryConfig.addPrefix('build' + envConfig.postfix), mainFunc);
+  }
 }
 
 function addTasks(gulpConfig : GulpConfig){

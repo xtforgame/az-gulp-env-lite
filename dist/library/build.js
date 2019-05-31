@@ -72,7 +72,11 @@ function addBuildTasks(libraryConfig, envConfig) {
 
   mainFunc.displayName = libraryConfig.addPrefix('build:<main>' + envConfig.postfix);
 
-  _gulp["default"].task(libraryConfig.addPrefix('build' + envConfig.postfix), _gulp["default"].series(_gulp["default"].parallel.apply(_gulp["default"], _toConsumableArray(waitingTasks)), mainFunc));
+  if (waitingTasks.length > 0) {
+    _gulp["default"].task(libraryConfig.addPrefix('build' + envConfig.postfix), _gulp["default"].series(_gulp["default"].parallel.apply(_gulp["default"], _toConsumableArray(waitingTasks)), mainFunc));
+  } else {
+    _gulp["default"].task(libraryConfig.addPrefix('build' + envConfig.postfix), mainFunc);
+  }
 }
 
 function addTasks(gulpConfig) {

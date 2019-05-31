@@ -123,7 +123,11 @@ function addBuildTasks(serverConfig, commonLibraryConfig, envConfig) {
 
   mainFunc.displayName = serverConfig.addPrefix('build:<main>' + envConfig.postfix);
 
-  _gulp["default"].task(serverConfig.addPrefix('build' + envConfig.postfix), _gulp["default"].series(_gulp["default"].parallel.apply(_gulp["default"], _toConsumableArray(waitingTasks)), mainFunc));
+  if (waitingTasks.length > 0) {
+    _gulp["default"].task(serverConfig.addPrefix('build' + envConfig.postfix), _gulp["default"].series(_gulp["default"].parallel.apply(_gulp["default"], _toConsumableArray(waitingTasks)), mainFunc));
+  } else {
+    _gulp["default"].task(serverConfig.addPrefix('build' + envConfig.postfix), mainFunc);
+  }
 
   _gulp["default"].task(serverConfig.addPrefix('build:extras' + envConfig.postfix), function () {
     var serverSourceDir = serverConfig.joinPathByKeys(['entry']);
