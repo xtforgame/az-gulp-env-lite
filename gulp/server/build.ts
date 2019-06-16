@@ -59,6 +59,7 @@ function addBuildServerDtsTask(serverConfig : GulpConfig, envConfig : EnvConfig)
   gulp.task(serverConfig.addPrefix('build:dts' + envConfig.postfix), /*commonLibraryConfig.addPrefix([clean']),*/ () => {
     let tsconfig = serverConfig.joinPathByKeys(['entry', 'ts', 'tsconfig']);
     let tsOutputDir = envConfig.env.joinPathByKeys(['js']);
+    let relativePath = '..';
 
     const tsProject = ts.createProject(tsconfig, {
       allowJs: false,
@@ -68,7 +69,7 @@ function addBuildServerDtsTask(serverConfig : GulpConfig, envConfig : EnvConfig)
     .pipe(tsProject());
 
     return tsResult.dts
-    .pipe(gulp.dest(tsOutputDir));
+    .pipe(gulp.dest(path.join(tsOutputDir, relativePath)));
   });
 }
 
